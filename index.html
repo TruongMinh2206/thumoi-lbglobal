@@ -250,7 +250,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           </div>
         </div>
         <div class="row" style="margin-top:14px">
-          <button class="btn primary single-only" id="exportOne">⬇️ Tải thư mời này (PNG)</button>
+          <button class="btn primary single-only" id="exportOne">⬇️ Tải thư mời này (JPG)</button>
           <button class="btn primary batch-only hidden" id="exportBatch">📦 Tạo tất cả &amp; tải ZIP</button>
           <button class="btn ghost" id="exportScale">Chất lượng: 2×</button>
         </div>
@@ -529,8 +529,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
     if(!S.bgImg){toast('Hãy chọn ảnh nền trước');return;}
     var c=drawCanvas($('#nameInput').value, S.photo.img, S.scale);
     c.toBlob(function(b){
-      saveFile(b, 'ThuMoi_'+safeName($('#nameInput').value)+'.png');
-    },'image/png');
+      saveFile(b, 'ThuMoi_'+safeName($('#nameInput').value)+'.jpg');
+    },'image/jpeg',0.95);
   };
 
   // ---------- batch ----------
@@ -594,12 +594,12 @@ https://github.com/nodeca/pako/blob/main/LICENSE
       var nm=names[i], pim=matchPhoto(nm,i);
       var c=drawCanvas(nm,pim,S.scale);
       c.toBlob(function(b){
-        zip.file((i+1).toString().padStart(3,'0')+'_ThuMoi_'+safeName(nm)+'.png', b);
+        zip.file((i+1).toString().padStart(3,'0')+'_ThuMoi_'+safeName(nm)+'.jpg', b);
         done++;i++;
         var pct=Math.round(done/names.length*100);
         bar.style.width=pct+'%';txt.textContent='Đang tạo '+done+'/'+names.length+'...';
         setTimeout(step,0);
-      },'image/png');
+      },'image/jpeg',0.95);
     }
     step();
   };
