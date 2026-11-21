@@ -318,8 +318,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
           <div class="hint">Nên dùng ảnh chân dung rõ mặt, đủ sáng.</div>
         </div>
         <input type="file" id="avInput" accept="image/*" class="hidden">
-        <label class="fld" for="avName">Họ và tên của bạn</label>
-        <input type="text" id="avName" placeholder="VD: Nguyễn Thị Lan" autocomplete="name" maxlength="60">
+        <label class="fld hidden" for="avName" id="avNameLbl">Họ và tên của bạn</label>
+        <input type="text" id="avName" class="hidden" placeholder="VD: Nguyễn Thị Lan" autocomplete="name" maxlength="60">
       </div>
 
       <div class="card" style="margin-top:14px">
@@ -839,11 +839,14 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   }
   function avSnap(){var c=avCenter();avStart={n:c.n,x:c.x,y:c.y,d:c.d,zoom:A.zoom,px:A.px,py:A.py};}
   avC.addEventListener('pointerdown',function(e){
-    if(!A.img){$('#avInput').click();return;}
+    if(!A.img)return; // chưa có ảnh: sự kiện click bên dưới sẽ mở hộp chọn ảnh
     e.preventDefault();
     try{avC.setPointerCapture(e.pointerId);}catch(err){}
     avPts[e.pointerId]={x:e.clientX,y:e.clientY};avSnap();
   });
+  // Mở hộp chọn ảnh bằng sự kiện click: trên điện thoại, trình duyệt chỉ cho mở khi chạm xong (click),
+  // không cho mở ngay lúc vừa chạm xuống (pointerdown).
+  avC.addEventListener('click',function(){if(!A.img)$('#avInput').click();});
   avC.addEventListener('pointermove',function(e){
     if(!avPts[e.pointerId]||!avStart||!A.img)return;
     avPts[e.pointerId]={x:e.clientX,y:e.clientY};
@@ -886,6 +889,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
   // Để trống ("") thì chỉ tải về máy, không gửi đi đâu.
   var AV_UPLOAD_URL="";
   if(AV_UPLOAD_URL){
+    $('#avNameLbl').classList.remove('hidden');$('#avName').classList.remove('hidden');
     $('#avPrivacy').innerHTML='Lưu ý: khi bấm tải, <strong>một bản avatar kèm họ tên</strong> của bạn sẽ được lưu vào Google Drive của công ty.';
   }
   var avLastUp='';
